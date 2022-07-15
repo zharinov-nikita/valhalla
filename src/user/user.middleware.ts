@@ -8,17 +8,17 @@ export class UserMiddleware implements NestMiddleware {
   constructor(private userService: UserService) {}
 
   async use(
-    @Req() req: { body: AuthorizationUserDto },
+    @Req() req: { headers: AuthorizationUserDto },
     @Res() res: Response,
     next: NextFunction
   ) {
-    const { login, password } = req.body
+    const { login, password } = req.headers
     const isBody = login && password
 
     if (isBody) {
-      const isUser = await this.userService.authorization({ login, password })
+      const user = await this.userService.authorization({ login, password })
 
-      if (isUser) {
+      if (user) {
         return next()
       }
 
