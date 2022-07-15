@@ -4,6 +4,7 @@ import { Model, ObjectId } from 'mongoose'
 import { Repository, RepositoryDocument } from './repository.schema'
 import { CreateRepositoryDto } from './dto/create-repository.dto'
 import { UpdateRepositoryDto } from './dto/update-repository.dto'
+import { FindRepositoryDto } from './dto/find-repository.dto'
 
 @Injectable()
 export class RepositoryService {
@@ -16,10 +17,9 @@ export class RepositoryService {
     return await this.repositoryModel.create(dto)
   }
 
-  async find(): Promise<Repository[]> {
-    return await this.repositoryModel.find()
+  async find(dto: FindRepositoryDto): Promise<Repository[]> {
+    return await this.repositoryModel.find(dto)
   }
-
   async findById(_id: ObjectId): Promise<Repository> {
     return await this.repositoryModel.findById({ _id })
   }
