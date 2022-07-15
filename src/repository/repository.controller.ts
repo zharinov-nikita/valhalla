@@ -6,9 +6,14 @@ import {
   Param,
   Patch,
   Post,
+  Query,
+  Req,
+  Res,
 } from '@nestjs/common'
+import { Request, Response } from 'express'
 import { ObjectId } from 'mongoose'
 import { CreateRepositoryDto } from './dto/create-repository.dto'
+import { FindRepositoryDto } from './dto/find-repository.dto'
 import { UpdateRepositoryDto } from './dto/update-repository.dto'
 import { Repository } from './repository.schema'
 import { RepositoryService } from './repository.service'
@@ -23,8 +28,25 @@ export class RepositoryController {
   }
 
   @Get()
-  async find(): Promise<Repository[]> {
-    return await this.repositoryService.find()
+  async find(
+    @Query() query: FindRepositoryDto,
+    @Req() req: Request,
+    @Res() res: Response
+  ): Promise<Repository[] | any> {
+    if (query.userId) {
+      const { userId } = query
+      const repository = await this.repositoryService.find({ userId })
+
+      if (repository.length > 0) {
+        return res.status(200).json(repository)
+      }
+
+      return res.status(200).json([])
+    }
+    return res.status(403).json({
+      statusCode: 403,
+      message: 'Empty required parameter userId',
+    })
   }
 
   @Get(':_id')
