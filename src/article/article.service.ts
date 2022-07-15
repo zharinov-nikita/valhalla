@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose'
 import { Model, ObjectId } from 'mongoose'
 import { Article, ArticleDocument } from './article.schema'
 import { CreateArticleDto } from './dto/create-article.dto'
+import { FindArticleDto } from './dto/find-article.dto'
 import { UpdateArticleDto } from './dto/update-article.dto'
 
 @Injectable()
@@ -16,8 +17,8 @@ export class ArticleService {
     return await this.articleModel.create(dto)
   }
 
-  async find(): Promise<Article[]> {
-    return await this.articleModel.find()
+  async find(dto: FindArticleDto): Promise<Article[]> {
+    return await this.articleModel.find(dto)
   }
 
   async findById(_id: ObjectId): Promise<Article> {
