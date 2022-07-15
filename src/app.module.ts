@@ -6,9 +6,8 @@ import {
 } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { MongooseModule } from '@nestjs/mongoose'
-import { AppController } from './app.controller'
 import { AppMiddleware } from './app.middleware'
-import { AppService } from './app.service'
+import { RepositoryModule } from './repository/repository.module'
 
 @Module({
   imports: [
@@ -16,9 +15,8 @@ import { AppService } from './app.service'
     MongooseModule.forRoot(String(process.env.MONGO_URL), {
       dbName: String(process.env.MONGO_DB),
     }),
+    RepositoryModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
