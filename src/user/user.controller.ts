@@ -6,64 +6,42 @@ import {
   Param,
   Patch,
   Post,
-  Query,
-  Req,
-  Res,
 } from '@nestjs/common'
 import { ObjectId } from 'mongoose'
-import { CreateArticleDto } from './user/create-user.dto'
-import { UpdateArticleDto } from './user/update-user.dto'
-import { Article } from './article.schema'
-import { ArticleService } from './article.service'
-import { FindArticleDto } from './user/find-article.dto'
-import { Request, Response } from 'express'
+import { CreateUserDto } from './user/create-user.dto'
+import { UpdateUserDto } from './user/update-user.dto'
+import { User } from './user.schema'
+import { UserService } from './user.service'
 
-@Controller('api/article')
-export class ArticleController {
-  constructor(private articleService: ArticleService) {}
+@Controller('api/user')
+export class UserController {
+  constructor(private userService: UserService) {}
 
   @Post()
-  async create(@Body() dto: CreateArticleDto): Promise<Article> {
-    return await this.articleService.create(dto)
+  async create(@Body() dto: CreateUserDto): Promise<User> {
+    return await this.userService.create(dto)
   }
 
   @Get()
-  async find(
-    @Query() query: FindArticleDto,
-    @Req() req: Request,
-    @Res() res: Response
-  ): Promise<Article[] | any> {
-    if (query.repositoryId) {
-      const { repositoryId } = query
-      const article = await this.articleService.find({ repositoryId })
-
-      if (article.length > 0) {
-        return res.status(200).json(article)
-      }
-
-      return res.status(200).json([])
-    }
-    return res.status(403).json({
-      statusCode: 403,
-      message: 'Empty required parameter repositoryId',
-    })
+  async find(): Promise<User[]> {
+    return await this.userService.find()
   }
 
   @Get(':_id')
-  async findById(@Param('_id') _id: ObjectId): Promise<Article> {
-    return await this.articleService.findById(_id)
+  async findById(@Param('_id') _id: ObjectId): Promise<User> {
+    return await this.userService.findById(_id)
   }
 
   @Patch(':_id')
   async findByIdAndUpdate(
     @Param('_id') _id: ObjectId,
-    @Body() dto: UpdateArticleDto
-  ): Promise<Article> {
-    return await this.articleService.findByIdAndUpdate(_id, dto)
+    @Body() dto: UpdateUserDto
+  ): Promise<User> {
+    return await this.userService.findByIdAndUpdate(_id, dto)
   }
 
   @Delete(':_id')
   async findByIdAndDelete(@Param('_id') _id: ObjectId) {
-    return await this.articleService.findByIdAndDelete(_id)
+    return await this.userService.findByIdAndDelete(_id)
   }
 }
