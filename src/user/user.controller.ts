@@ -8,8 +8,8 @@ import {
   Post,
 } from '@nestjs/common'
 import { ObjectId } from 'mongoose'
-import { CreateUserDto } from './user/create-user.dto'
-import { UpdateUserDto } from './user/update-user.dto'
+import { CreateUserDto } from './dto/create-user.dto'
+import { UpdateUserDto } from './dto/update-user.dto'
 import { User } from './user.schema'
 import { UserService } from './user.service'
 
